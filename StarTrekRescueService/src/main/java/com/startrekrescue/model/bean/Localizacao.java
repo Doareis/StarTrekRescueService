@@ -6,9 +6,14 @@ public class Localizacao {
 	private int x = 0;
 	private int y = 0;
 	
+	public Localizacao(){
+		
+	}
+	
 	public Localizacao(int x, int y) {
-		setX(x);
-		setY(y);
+		super();
+		this.x = x;
+		this.y = y;
 	}
 
 	public int getX() {
