@@ -18,6 +18,7 @@ public class TestJSon extends TestCase{
 		Localizacao localJson = (Localizacao) obj.get("localizacao");
 		System.out.println(obj.toString());
 		assertEquals(3, localJson.getX());
+
 		
 	}
 }
