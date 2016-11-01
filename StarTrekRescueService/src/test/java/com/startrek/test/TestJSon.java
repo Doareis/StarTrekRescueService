@@ -1,12 +1,10 @@
 package com.startrek.test;
 
 import junit.framework.TestCase;
-
 import org.json.JSONObject;
-
 import com.startrekrescue.model.bean.Localizacao;
 
-// classe usada para o testar as funcionalidades do jason
+// classe usada para o testar as funcionalidades do json
 public class TestJSon extends TestCase{
 
 	public void test() {
@@ -18,7 +16,6 @@ public class TestJSon extends TestCase{
 		Localizacao localJson = (Localizacao) obj.get("localizacao");
 		System.out.println(obj.toString());
 		assertEquals(3, localJson.getX());
-
 		
 	}
 }

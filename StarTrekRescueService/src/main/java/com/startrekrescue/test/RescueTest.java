@@ -21,7 +21,6 @@ public class RescueTest extends TestCase{
 	public void test(){
 
 		Controller controller = new Controller();
-
 		int numeroDeTripulantesQueFaltaEncontrar = Constants.NUMERO_DE_TRIPULANTES;
 
 		while (controller.getNumeroDeTripulantesEncontrados() != Constants.NUMERO_DE_TRIPULANTES){
@@ -57,6 +56,5 @@ public class RescueTest extends TestCase{
 		}
 
 	}
-
 
 }

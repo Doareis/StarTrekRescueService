@@ -1,5 +1,7 @@
 package com.startrekrescue.service;
 
+import io.swagger.annotations.Api;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -9,6 +11,7 @@ import javax.ws.rs.Produces;
 import com.startrekrescue.control.ServiceController;
 import com.startrekrescue.model.bean.Localizacao;
 
+@Api
 @Path("/service")
 public class StarTrekRescueService {
 
@@ -18,8 +21,15 @@ public class StarTrekRescueService {
 	@Path("/sinalizador")
 	public String lancaSinalizador(Localizacao local){
 		
-		ServiceController.getController().lancaSinalizador(local.getX(), local.getY());
-		return "Sinalizador lançado com sucesso";
+		if (local != null){
+			int coordenadaX = local.getX() - 1;
+			int coordenadaY = local.getY() - 1;
+			ServiceController.getController().lancaSinalizador(coordenadaX, coordenadaY);
+			return "Sinalizador lançado com sucesso";
+		}
+		else {
+			return "Coordenadas de lançamento são inválidas";
+		}
 
 	}
 	

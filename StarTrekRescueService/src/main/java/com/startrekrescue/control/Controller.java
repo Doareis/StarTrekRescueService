@@ -3,7 +3,7 @@ package com.startrekrescue.control;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
+import org.apache.log4j.Logger;
 import com.startrekrescue.constants.Constants;
 import com.startrekrescue.control.enumeration.EnumStatusLocal;
 import com.startrekrescue.model.bean.Localizacao;
@@ -13,9 +13,9 @@ public class Controller {
 
 	private int numeroDeSinalizadoresLancados = 0;
 	private int numeroDeTripulantesEncontrados = 0;
-	
 	private int [][] planicie;
 	private List<Tripulante> tripulantes;
+	private Logger logger = Logger.getLogger(this.getClass());
 
 	public int getNumeroDeTripulantesEncontrados() {
 		return numeroDeTripulantesEncontrados;
@@ -26,25 +26,32 @@ public class Controller {
 	}
 
 	public Controller() {
-		
+
 		gerarPosicaoDosTripulantes(Constants.NUMERO_DE_TRIPULANTES);
 		planicie = new int[Constants.TAMANHO_PLANICIE][Constants.TAMANHO_PLANICIE];
 	}
-	
+
 	/*
 	 *  executa lancamento de sinalizador na coordenada (X, Y).
 	 */
 	public void lancaSinalizador(int coordenadaX, int coordenadaY) {
-		
-		// achou um tripulante.
-		if (verificaSeEncontrouTripulante(coordenadaX, coordenadaY) == false){
 
-			// achou tripulante proximo.
-			if (verificaAdjacencia(coordenadaX, coordenadaY) == false){
+		logger.info(String.format("Coordenadas (%d, %d) ", coordenadaX, coordenadaY));
+		// verifica os limites da planicie.
+		if ((coordenadaX >= 0 && coordenadaX < planicie.length) && (coordenadaY >= 0 && coordenadaY < planicie.length)){
+			// achou um tripulante.
+			if (verificaSeEncontrouTripulante(coordenadaX, coordenadaY) == false){
 
-				// nao encontrou tripulante (nem ao menos aos arredores).
-				setValorPlanicie(coordenadaX, coordenadaY, EnumStatusLocal.SEM_TRIPULANTE); 
+				// achou tripulante proximo.
+				if (verificaAdjacencia(coordenadaX, coordenadaY) == false){
+
+					// nao encontrou tripulante (nem ao menos aos arredores).
+					setValorPlanicie(coordenadaX, coordenadaY, EnumStatusLocal.SEM_TRIPULANTE); 
+				}
 			}
+		}
+		else{
+			logger.warn(String.format("Coordenadas (%d, %d) inválida", coordenadaX, coordenadaY));
 		}
 	}
 
@@ -78,7 +85,6 @@ public class Controller {
 				i++;
 			}
 		}
-
 	}
 
 	/*
@@ -86,19 +92,18 @@ public class Controller {
 	 * supoe que as coordenadas estao na planicie, portanto essa validacao eh feita por fora.
 	 * Apenas altera o status em dado ponto se o mesmo ja nao foi marcado como contendo tripulante.
 	 */
-	public void setValorPlanicie(int posX, int posY, EnumStatusLocal status) {
+	private void setValorPlanicie(int posX, int posY, EnumStatusLocal status) {
 
 		if (planicie[posX][posY] != EnumStatusLocal.TRIPULANTE_ENCONTRADO.getCodigo())
 			planicie[posX][posY] = status.getCodigo();
-
 	}
 
 	/*
 	 * Verifica se ha tripulante nas proximidades e faz as devidas marcacoes na planicie.
 	 * Devolve true se encontra tripulante nas proximidades ou false caso conrario.
 	 */
-	public boolean verificaAdjacencia(int x, int y) {
-		
+	private boolean verificaAdjacencia(int x, int y) {
+
 		for (Tripulante tripulante : tripulantes){
 
 			int posX = tripulante.getLocal().getX();
@@ -122,15 +127,15 @@ public class Controller {
 	 * que sejam em comum com o local do tripulante e do sinalizador.
 	 */
 	private void realizaMarcacoesNasProximidades(int x, int y, int tripulantePosX, int tripulantePosY) {
-		
+
 		int delta = 1;
-		
+
 		for (int i = x - 1; i <= x + delta; i++){
 			for (int j = y - 1; j <= y + delta; j++){
-				
+
 				// verifica os limites da planicie.
 				if ((i >= 0 && i < planicie.length) && (j >= 0 && j < planicie.length)){
-					
+
 					// se esta nas proximidades do tripulante.
 					if ((Math.abs(i - tripulantePosX) <= 1) && (Math.abs(j - tripulantePosY) <= 1)){
 						setValorPlanicie(i, j, EnumStatusLocal.TRIPULANTE_NAS_PROXIMIDADES);
@@ -139,13 +144,13 @@ public class Controller {
 			}
 		}
 	}
-	
+
 	/*
 	 * Devolve true se encontra a posicao exata de um tripulante e marca sua localizacao na planicie.
 	 * Devolve false, caso contrario.
 	 * Incrementa o numero de sinalizadores lancados.
 	 */
-	public boolean verificaSeEncontrouTripulante(int x, int y) {
+	private boolean verificaSeEncontrouTripulante(int x, int y) {
 
 		numeroDeSinalizadoresLancados++;
 
@@ -168,7 +173,7 @@ public class Controller {
 	public List<Tripulante> getTripulantes() {
 		return this.tripulantes;
 	}
-	
+
 	public int [][] getPlanicie() {
 		return this.planicie;
 	}
@@ -193,7 +198,7 @@ public class Controller {
 			for (int j = 0; j < tamanhoDaPlanicie; j++){
 
 				char info = EnumStatusLocal.getStatusLocal(planicie[i][j]).getValor();
-				
+
 				planicieStr.append(" " + info);
 			}
 			planicieStr.append("\n");
