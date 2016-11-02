@@ -18,7 +18,7 @@ Caso não tenha encontrado, ele rastreará as áreas adjacentes ao ponto que ele
 Observe que há uma imprecisão no sinalizador, então ele marca as áreas adjacentes em comum aos dos dois pontos, sinalizador e tripulante.
 	Se não encontrar nada naquele ponto e nas respectivas áreas adjacentes marque com * para mapear a malha com mais precisão.
 	
-	O sistema deverá prover uma API REST que permita ser acessada de qualquer sede da Frota Estelar via URLs. Dessa forma, as equipes de resgate conseguirão acionar o serviço de qualquer lugar e terão maiores recursos, uma vez que usaremos toda a infraestrutura do QG da Frota Estelar.
+O sistema deverá prover uma API REST que permita ser acessada de qualquer sede da Frota Estelar via URLs. Dessa forma, as equipes de resgate conseguirão acionar o serviço de qualquer lugar e terão maiores recursos, uma vez que usaremos toda a infraestrutura do QG da Frota Estelar.
 
 # Desenvolvimento
 
